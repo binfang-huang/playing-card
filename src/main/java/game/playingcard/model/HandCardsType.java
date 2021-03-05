@@ -1,6 +1,8 @@
 package game.playingcard.model;
 
 public enum HandCardsType {
+    TWO_PAIRS(95),
+    THREE_OF_A_KIND(96),
     STRAIGHT(96),
     FULL_HOUSE(97),
     FOUR_OF_A_KIND(98),

@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 public class HandCards implements Comparable<HandCards> {
     private List<Card> sortedCards;
     private HandCardsType handCardsType;
+    private int equalNumber;
 
 
     public HandCards(final List<Card> sortedCards) {
@@ -40,11 +41,10 @@ public class HandCards implements Comparable<HandCards> {
 
             characterCountMap.forEach((key, value) -> {
                         if (value != 4) {
-                            sortedCards = moveCardsWithGivenCharacterToEnd(key);
+                            moveCardsWithGivenCharactersToEnd(List.of(key));
                         }
                     }
             );
-
             return;
         }
 
@@ -53,40 +53,84 @@ public class HandCards implements Comparable<HandCards> {
             Map<String, Integer> characterCountMap = getCharacterCountMap();
             characterCountMap.forEach((key, value) -> {
                         if (value == 2) {
-                            sortedCards = moveCardsWithGivenCharacterToEnd(key);
+                            moveCardsWithGivenCharactersToEnd(List.of(key));
                         }
                     }
             );
             return;
         }
+
         if (isStraight()) {
             this.handCardsType = HandCardsType.STRAIGHT;
 
             resortSequence();
             return;
         }
+
+        if (isThreeOfKind()) {
+            this.handCardsType = HandCardsType.THREE_OF_A_KIND;
+            Map<String, Integer> characterCountMap = getCharacterCountMap();
+
+            List<String> characters = new ArrayList<>();
+            characterCountMap.forEach((key, value) -> {
+                        if (value != 3) {
+                            characters.add(key);
+                        }
+                    }
+            );
+            moveCardsWithGivenCharactersToEnd(characters);
+            return;
+        }
+
+        if (isTwoPairs()) {
+            this.handCardsType = HandCardsType.TWO_PAIRS;
+
+            Map<String, Integer> characterCountMap = getCharacterCountMap();
+
+            characterCountMap.forEach((key, value) -> {
+                        if (value != 2) {
+                            moveCardsWithGivenCharactersToEnd(List.of(key));
+                        }
+                    }
+            );
+            return;
+        }
+    }
+
+    private boolean isTwoPairs() {
+        Map<String, Integer> characterCountMap = getCharacterCountMap();
+
+        return characterCountMap.size() == 3 && characterCountMap.containsValue(2) && characterCountMap.containsValue(1);
+    }
+
+    private boolean isThreeOfKind() {
+        Map<String, Integer> characterCountMap = getCharacterCountMap();
+
+        return characterCountMap.size() == 3 && characterCountMap.containsValue(3);
     }
 
     private void resortSequence() {
-        if (sortedCards.contains("A")) {
-            sortedCards = moveCardsWithGivenCharacterToEnd("A");
-        }
+        moveCardsWithGivenCharactersToEnd(List.of("A"));
     }
 
     private boolean isStraight() {
         return !isSameShape() && isSequence();
     }
 
-    private List<Card> moveCardsWithGivenCharacterToEnd(final String character) {
-        List<Card> reorderedCards = new ArrayList<>();
+    private void moveCardsWithGivenCharactersToEnd(List<String> characters) {
+        List<Card> cardsAtFront = new ArrayList<>();
+        List<Card> cardsAtEnd = new ArrayList<>();
         for (Card card : sortedCards) {
-            if (!card.getCharacter().equals(character)) {
-                reorderedCards.add(0, card);
+            if (!characters.contains(card.getCharacter())) {
+                cardsAtFront.add(card);
             } else {
-                reorderedCards.add(reorderedCards.size(), card);
+                cardsAtEnd.add(card);
             }
         }
-        return reorderedCards;
+        cardsAtFront.addAll(cardsAtEnd);
+
+        this.sortedCards = cardsAtFront;
+
     }
 
 
@@ -105,10 +149,15 @@ public class HandCards implements Comparable<HandCards> {
     }
 
     private boolean isSequence() {
-        int largestCardValue = sortedCards.get(0).getValue();
-        int smallestCardValue = sortedCards.get(sortedCards.size() - 1).getValue();
-        return largestCardValue - smallestCardValue == sortedCards.size() - 1 ||
-                isSmallestSequence();
+        if (isSmallestSequence()) {
+            return true;
+        }
+        for (int i = 0; i < sortedCards.size(); i++) {
+            if (sortedCards.get(i).compareTo(sortedCards.get(i + 1)) != 1) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private boolean isSmallestSequence() {
@@ -160,16 +209,25 @@ public class HandCards implements Comparable<HandCards> {
     @Override
     public int compareTo(final HandCards handCards) {
         int compareResult = this.handCardsType.getValue() - handCards.getHandCardsType().getValue();
+        equalNumber = 0;
 
         if (compareResult != 0) {
             return compareResult;
         }
 
-        return this.getCardsValueAsString().compareTo(handCards.getCardsValueAsString());
+        for (int i = 0; i < sortedCards.size(); i++) {
+            Card firstCard = sortedCards.get(i);
+            Card secondCard = handCards.sortedCards.get(i);
+            if (firstCard.compareTo(secondCard) != equalNumber) {
+                return firstCard.compareTo(secondCard);
+            }
+        }
+        return 0;
 
     }
 
-    private String getCardsValueAsString() {
+    String getCardsValueAsString() {
         return sortedCards.stream().map(it -> String.valueOf(it.getValue())).collect(Collectors.joining());
     }
+
 }

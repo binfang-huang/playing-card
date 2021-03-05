@@ -1,12 +1,12 @@
 package game.playingcard.model;
 
-public class Card {
-     private String character;
-     private int  value;
-     private CardShape shape;
+public class Card implements Comparable<Card> {
+    private String character;
+    private int value;
+    private CardShape shape;
 
 
-    public Card(final  String character, final int value, final CardShape shipType) {
+    public Card(final String character, final int value, final CardShape shipType) {
         this.character = character;
         this.value = value;
         this.shape = shipType;
@@ -22,5 +22,10 @@ public class Card {
 
     public CardShape getShape() {
         return shape;
+    }
+
+    @Override
+    public int compareTo(final Card card) {
+        return this.value - card.value;
     }
 }
