@@ -5,8 +5,10 @@ import static game.playingcard.model.CardsType.ROYAL_FLUSH;
 import game.playingcard.model.Cards;
 import game.playingcard.model.CardsType;
 import java.util.Arrays;
+import java.util.List;
 
 public class CardsComparator {
+
     public int compare(final Cards firstCards, final Cards secondCards) {
         firstCards.setCardsType(calculateCardsType(firstCards));
         secondCards.setCardsType(calculateCardsType(secondCards));
@@ -17,12 +19,15 @@ public class CardsComparator {
             return compareResult;
         }
 
-        if (firstCards.getCardsType() == ROYAL_FLUSH) {
-            return 0;
-        }
+        List<Integer> firstCardsValues = firstCards.getValueList();
+        List<Integer> secondCardsValues = secondCards.getValueList();
 
-        if(firstCards.getCardsType() == CardsType.FLUSH_STRAIGHT) {
-            return firstCards.getLargestCardValue() - secondCards.getLargestCardValue();
+        for (int i = 0; i < Cards.CARD_SIZE; i++) {
+            if (firstCardsValues.get(i) == secondCardsValues.get(i)) {
+                continue;
+            }
+            compareResult = firstCardsValues.get(i) - secondCardsValues.get(i);
+            break;
         }
 
         return compareResult;

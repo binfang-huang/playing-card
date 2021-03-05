@@ -22,7 +22,7 @@ class CardsComparatorTest {
         Cards secondCards = new Cards(Arrays.asList(new Card("A", 1, CardShape.HEI_TAO),
                 new Card("Q", 12, CardShape.HEI_TAO),
                 new Card("T", 10, CardShape.HEI_TAO),
-                new Card("K", 14, CardShape.HEI_TAO),
+                new Card("K", 13, CardShape.HEI_TAO),
                 new Card("J", 11, CardShape.HEI_TAO)));
 
         int result = cardsComparator.compare(firstCards,secondCards);
@@ -52,7 +52,7 @@ class CardsComparatorTest {
     }
 
     @Test
-    void should_return_1_if_two_hands_of_cards_are_Flush_Straight_and_first_cards_characters_are_bigger() {
+    void should_return_negtive_value_if_two_hands_of_cards_are_Flush_Straight_and_first_cards_characters_are_bigger() {
         Cards firstCards = new Cards(Arrays.asList(new Card("7", 5, CardShape.HONG_TAO),
                 new Card("4", 4, CardShape.HONG_TAO),
                 new Card("3", 3, CardShape.HONG_TAO),
@@ -68,5 +68,24 @@ class CardsComparatorTest {
         int result = cardsComparator.compare(firstCards,secondCards);
 
         Assertions.assertTrue(result<0);
+    }
+
+    @Test
+    void should_return_positive_value_if_first_cards_type_is_bigger_than_second_cards_type() {
+        Cards firstCards = new Cards(Arrays.asList(new Card("A", 1, CardShape.HONG_TAO),
+                new Card("K", 13, CardShape.HONG_TAO),
+                new Card("Q", 12, CardShape.HONG_TAO),
+                new Card("J", 11, CardShape.HONG_TAO),
+                new Card("T", 10, CardShape.HONG_TAO)));
+
+        Cards secondCards = new Cards(Arrays.asList(new Card("2", 2, CardShape.HEI_TAO),
+                new Card("3", 3, CardShape.HEI_TAO),
+                new Card("4", 4, CardShape.HEI_TAO),
+                new Card("5", 5, CardShape.HEI_TAO),
+                new Card("6", 6, CardShape.HEI_TAO)));
+
+        int result = cardsComparator.compare(firstCards,secondCards);
+
+        Assertions.assertTrue(result>0);
     }
 }

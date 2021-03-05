@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Cards {
-    private static final int CARD_SIZE = 5;
+    public static final int CARD_SIZE = 5;
     private List<Card> cards;
     private CardsType cardsType;
 
@@ -32,7 +32,7 @@ public class Cards {
     }
 
     public boolean containsAllCharacters(List<String> characters) {
-        List<String> charactersInCards = cards.stream().map(it -> it.getCharacter()).collect(Collectors.toList());
+        List<String> charactersInCards = cards.stream().map(Card::getCharacter).collect(Collectors.toList());
         for (String character : characters) {
             if (!charactersInCards.contains(character)) {
                 return false;
@@ -50,7 +50,8 @@ public class Cards {
                 (largestCardValue == 13 && secondSmallestCardValue == 10 && smallestCardValue == 1);
     }
 
-    public int getLargestCardValue() {
-        return cards.get(0).getValue();
+
+    public List<Integer> getValueList() {
+        return cards.stream().map(Card::getValue).collect(Collectors.toList());
     }
 }
