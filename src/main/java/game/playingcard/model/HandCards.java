@@ -71,14 +71,14 @@ public class HandCards implements Comparable<HandCards> {
             this.handCardsType = HandCardsType.THREE_OF_A_KIND;
             Map<String, Integer> characterCountMap = getCharacterCountMap();
 
-            List<String> characters = new ArrayList<>();
+            List<String> charactersToEnd = new ArrayList<>();
             characterCountMap.forEach((key, value) -> {
                         if (value != 3) {
-                            characters.add(key);
+                            charactersToEnd.add(key);
                         }
                     }
             );
-            moveCardsWithGivenCharactersToEnd(characters);
+            moveCardsWithGivenCharactersToEnd(charactersToEnd);
             return;
         }
 
@@ -95,6 +95,29 @@ public class HandCards implements Comparable<HandCards> {
             );
             return;
         }
+
+        if (isPairs()) {
+            this.handCardsType = HandCardsType.TWO_PAIRS;
+
+            Map<String, Integer> characterCountMap = getCharacterCountMap();
+            List<String> charactersToEnd = new ArrayList<>();
+            characterCountMap.forEach((key, value) -> {
+                        if (value != 2) {
+                            charactersToEnd.add(key);
+                        }
+                    }
+            );
+            moveCardsWithGivenCharactersToEnd(charactersToEnd);
+            return;
+        }
+
+        this.handCardsType = HandCardsType.HIGH_CARDS;
+    }
+
+    private boolean isPairs() {
+        Map<String, Integer> characterCountMap = getCharacterCountMap();
+
+        return characterCountMap.size() == 4 && characterCountMap.containsValue(2);
     }
 
     private boolean isTwoPairs() {
@@ -152,7 +175,7 @@ public class HandCards implements Comparable<HandCards> {
         if (isSmallestSequence()) {
             return true;
         }
-        for (int i = 0; i < sortedCards.size(); i++) {
+        for (int i = 0; i < sortedCards.size() - 1; i++) {
             if (sortedCards.get(i).compareTo(sortedCards.get(i + 1)) != 1) {
                 return false;
             }

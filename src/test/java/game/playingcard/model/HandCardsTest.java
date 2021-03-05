@@ -255,4 +255,88 @@ class HandCardsTest {
         Assertions.assertEquals(firstHandCards.getCardsValueAsString(), "66558");
         Assertions.assertEquals(secondHandCards.getCardsValueAsString(), "66559");
     }
+
+    @Test
+    void test_OnePair_comparison() {
+        HandCards firstHandCards = new HandCards(Arrays.asList(new Card("5", 5, CardShape.HEARTS),
+                new Card("6", 6, CardShape.HEARTS),
+                new Card("5", 5, CardShape.HEARTS),
+                new Card("7", 7, CardShape.SPADE),
+                new Card("8", 8, CardShape.HEARTS)));
+
+        HandCards secondHandCards = new HandCards(Arrays.asList(new Card("5", 5, CardShape.HEARTS),
+                new Card("5", 5, CardShape.HEARTS),
+                new Card("Q", 12, CardShape.HEARTS),
+                new Card("7", 7, CardShape.SPADE),
+                new Card("8", 8, CardShape.HEARTS)));
+
+        int result = firstHandCards.compareTo(secondHandCards);
+
+        Assertions.assertTrue(result < 0);
+        Assertions.assertEquals(firstHandCards.getCardsValueAsString(), "55876");
+        Assertions.assertEquals(secondHandCards.getCardsValueAsString(), "551287");
+
+        firstHandCards = new HandCards(Arrays.asList(new Card("6", 6, CardShape.HEARTS),
+                new Card("6", 6, CardShape.HEARTS),
+                new Card("5", 5, CardShape.HEARTS),
+                new Card("7", 7, CardShape.SPADE),
+                new Card("8", 8, CardShape.HEARTS)));
+
+         secondHandCards = new HandCards(Arrays.asList(new Card("5", 5, CardShape.HEARTS),
+                new Card("5", 5, CardShape.HEARTS),
+                new Card("Q", 12, CardShape.HEARTS),
+                new Card("7", 7, CardShape.SPADE),
+                new Card("8", 8, CardShape.HEARTS)));
+
+        result = firstHandCards.compareTo(secondHandCards);
+
+        Assertions.assertTrue(result > 0);
+        Assertions.assertEquals(firstHandCards.getCardsValueAsString(), "66875");
+        Assertions.assertEquals(secondHandCards.getCardsValueAsString(), "551287");
+    }
+
+
+    @Test
+    void test_HighCards_comparison() {
+        HandCards firstHandCards = new HandCards(Arrays.asList(new Card("9", 9, CardShape.HEARTS),
+                new Card("A", 14, CardShape.HEARTS),
+                new Card("Q", 12, CardShape.HEARTS),
+                new Card("7", 7, CardShape.SPADE),
+                new Card("8", 8, CardShape.HEARTS)));
+
+        HandCards secondHandCards = new HandCards(Arrays.asList(new Card("5", 5, CardShape.HEARTS),
+                new Card("A", 14, CardShape.HEARTS),
+                new Card("Q", 12, CardShape.HEARTS),
+                new Card("7", 7, CardShape.SPADE),
+                new Card("8", 8, CardShape.HEARTS)));
+
+        int result = firstHandCards.compareTo(secondHandCards);
+
+        Assertions.assertTrue(result> 0);
+        Assertions.assertEquals(firstHandCards.getCardsValueAsString(), "1412987");
+        Assertions.assertEquals(secondHandCards.getCardsValueAsString(), "1412875");
+
+    }
+
+    @Test
+    void test_different_type_comparison() {
+        HandCards firstHandCards = new HandCards(Arrays.asList(new Card("9", 9, CardShape.HEARTS),
+                new Card("A", 14, CardShape.HEARTS),
+                new Card("Q", 12, CardShape.HEARTS),
+                new Card("7", 7, CardShape.SPADE),
+                new Card("8", 8, CardShape.HEARTS)));
+
+        HandCards secondHandCards = new HandCards(Arrays.asList(new Card("5", 5, CardShape.HEARTS),
+                new Card("5", 5, CardShape.HEARTS),
+                new Card("Q", 12, CardShape.HEARTS),
+                new Card("7", 7, CardShape.SPADE),
+                new Card("8", 8, CardShape.HEARTS)));
+
+        int result = firstHandCards.compareTo(secondHandCards);
+
+        Assertions.assertTrue(result < 0);
+        Assertions.assertEquals(firstHandCards.getCardsValueAsString(), "1412987");
+        Assertions.assertEquals(secondHandCards.getCardsValueAsString(), "551287");
+
+    }
 }
