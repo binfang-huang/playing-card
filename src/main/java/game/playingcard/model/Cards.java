@@ -2,7 +2,9 @@ package game.playingcard.model;
 
 import game.playingcard.exception.InvalidCardsException;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Cards {
@@ -60,5 +62,18 @@ public class Cards {
 
     public boolean isLargestSequence() {
         return containsAllCharacters(List.of("A", "K", "Q", "J", "T"));
+    }
+
+    public boolean contains4SameCharacters() {
+        Map<String, Integer> characterCountMap = new HashMap<>();
+        for (Card card : cards) {
+            if (characterCountMap.containsKey(card.getCharacter())) {
+                characterCountMap.put(card.getCharacter(), characterCountMap.get(card.getCharacter()) + 1);
+            } else {
+                characterCountMap.put(card.getCharacter(), 1);
+            }
+        }
+
+        return characterCountMap.containsValue(4);
     }
 }

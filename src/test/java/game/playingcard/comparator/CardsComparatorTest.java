@@ -88,4 +88,23 @@ class CardsComparatorTest {
 
         Assertions.assertTrue(result>0);
     }
+
+    @Test
+    void should_return_active_if_two_hand_cards_are_4_of_kinds_and_first_hand_cards_characters_are_bigger() {
+        Cards firstCards = new Cards(Arrays.asList(new Card("A", 14, CardShape.HONG_TAO),
+                new Card("A", 14, CardShape.HEI_TAO),
+                new Card("A", 14, CardShape.FANG_PIAN),
+                new Card("A", 14, CardShape.MEI_HUA),
+                new Card("T", 10, CardShape.HONG_TAO)));
+
+        Cards secondCards = new Cards(Arrays.asList(new Card("K", 13, CardShape.HONG_TAO),
+                new Card("K", 13, CardShape.HEI_TAO),
+                new Card("K", 13, CardShape.FANG_PIAN),
+                new Card("K", 13, CardShape.MEI_HUA),
+                new Card("T", 10, CardShape.HONG_TAO)));
+
+        int result = cardsComparator.compare(firstCards,secondCards);
+
+        Assertions.assertTrue(result>0);
+    }
 }

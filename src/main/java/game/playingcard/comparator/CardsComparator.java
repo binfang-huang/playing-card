@@ -59,6 +59,11 @@ public class CardsComparator {
         if (cards.isSameShape() && cards.isSequence()) {
             return CardsType.FLUSH_STRAIGHT;
         }
+
+        if(cards.contains4SameCharacters()){
+            return CardsType.FOUR_OF_A_KIND;
+        }
+
         return null;
     }
 }
