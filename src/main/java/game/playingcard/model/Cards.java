@@ -42,16 +42,23 @@ public class Cards {
     }
 
 
-    public boolean isSequenceLine() {
+    public boolean isSequence() {
         int largestCardValue = cards.get(0).getValue();
         int smallestCardValue = cards.get(cards.size() - 1).getValue();
-        int secondSmallestCardValue = cards.get(cards.size() - 2).getValue();
         return largestCardValue - smallestCardValue == CARD_SIZE - 1 ||
-                (largestCardValue == 13 && secondSmallestCardValue == 10 && smallestCardValue == 1);
+                isSmallestSequence();
+    }
+
+    public boolean isSmallestSequence() {
+        return containsAllCharacters(List.of("2","3","4","5","A"));
     }
 
 
     public List<Integer> getValueList() {
         return cards.stream().map(Card::getValue).collect(Collectors.toList());
+    }
+
+    public boolean isLargestSequence() {
+        return containsAllCharacters(List.of("A", "K", "Q", "J", "T"));
     }
 }
